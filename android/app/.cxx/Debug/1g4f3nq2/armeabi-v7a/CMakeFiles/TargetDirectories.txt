@@ -1,0 +1,2 @@
+D:/Micro Merger/SQLITE DATABASE/sqlite/android/app/.cxx/Debug/1g4f3nq2/armeabi-v7a/CMakeFiles/edit_cache.dir
+D:/Micro Merger/SQLITE DATABASE/sqlite/android/app/.cxx/Debug/1g4f3nq2/armeabi-v7a/CMakeFiles/rebuild_cache.dir

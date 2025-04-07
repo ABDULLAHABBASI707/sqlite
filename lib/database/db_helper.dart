@@ -26,8 +26,8 @@ class DBHelper {
   Future<Database> openDB() async {
     Directory appDir = await getApplicationDocumentsDirectory();
     String dbpath = join(appDir.path, "user_db.db");
-    return await openDatabase(
-        dbpath, version: 1, onCreate: (db, version) async {
+    return await openDatabase(dbpath, version: 1,
+        onCreate: (db, version) async {
       await db.execute("CREATE TABLE $TABLE_USER ("
           "$COLUMN_USER_ID INTEGER PRIMARY KEY , "
           "$COLUMN_USER_NAME TEXT, "
@@ -62,20 +62,25 @@ class DBHelper {
     return data;
   }
 
-
   ///upadate user data
 
   Future<bool> updateUserInfo(
-      {required int userid, required String name, required String age, required String address, required String dob}) async {
+      {required int userid,
+      required String name,
+      required String age,
+      required String address,
+      required String dob}) async {
     var db = await getDB();
-    int rowEffected = await db.update(TABLE_USER, {
-      COLUMN_USER_NAME: name,
-      COLUMN_USER_AGE: age,
-      COLUMN_USER_ADDRESS: address,
-      COLUMN_USER_DOB: dob,
-
-    },
-      where: "$TABLE_USER=$userid",
+    int rowEffected = await db.update(
+      TABLE_USER,
+      {
+        COLUMN_USER_NAME: name,
+        COLUMN_USER_AGE: age,
+        COLUMN_USER_ADDRESS: address,
+        COLUMN_USER_DOB: dob,
+      },
+      where: "$COLUMN_USER_ID = ?",
+      whereArgs: [userid],
     );
     return rowEffected > 0;
   }
@@ -83,11 +88,11 @@ class DBHelper {
   ///delete user data
   Future<bool> deleteUserInfo({required int userid}) async {
     var db = await getDB();
-    int rowEffected = await db.delete(TABLE_USER,
+    int rowEffected = await db.delete(
+      TABLE_USER,
       where: "$COLUMN_USER_ID=?",
       whereArgs: ['$userid'],
     );
     return rowEffected > 0;
   }
 }
-

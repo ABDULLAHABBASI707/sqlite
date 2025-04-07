@@ -65,24 +65,33 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Row(
                       children: [
                         IconButton(
-                            icon: Icon(Icons.edit),
-                            onPressed: ()  {
-                              form.control('name').value=
-                                  allUserInfo[index][DBHelper.COLUMN_USER_NAME];
-                              form.control('age').value =
-                                  allUserInfo[index][DBHelper.COLUMN_USER_AGE];
-                              form.control('address').value = allUserInfo[index]
-                                  [DBHelper.COLUMN_USER_ADDRESS];
-                              form.control('dob').value =
-                                  allUserInfo[index][DBHelper.COLUMN_USER_DOB];
+                          icon: Icon(Icons.edit),
+                          onPressed: () async {
+                            form.control('name').value =
+                                allUserInfo[index][DBHelper.COLUMN_USER_NAME];
+                            form.control('age').value =
+                                allUserInfo[index][DBHelper.COLUMN_USER_AGE];
+                            form.control('address').value = allUserInfo[index]
+                                [DBHelper.COLUMN_USER_ADDRESS];
+                            form.control('dob').value =
+                                allUserInfo[index][DBHelper.COLUMN_USER_DOB];
 
-                              getReactiveFormData(
-                                isupdate: true,
-                                userid: allUserInfo[index]
-                                    [DBHelper.COLUMN_USER_ID],);
+                            final updatedUser = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => getReactiveFormData(
+                                  isupdate: true,
+                                  userid: allUserInfo[index]
+                                      [DBHelper.COLUMN_USER_ID],
+                                ),
+                              ),
+                            );
 
-                           },
-),
+                            if (updatedUser == true) {
+                              getUser();
+                            }
+                          },
+                        ),
                         //Delete Icon Button
                         IconButton(
                           onPressed: () async {
@@ -106,6 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
+          form.reset();
           form.control('name').clearValidators();
           form.control('age').clearValidators();
           form.control('address').clearValidators();
@@ -201,7 +211,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               name: name, age: age, address: address, dob: dob);
                       if (check) {
                         getUser();
-                        Navigator.pop(context);
+                        Navigator.pop(context, true);
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
